@@ -23,6 +23,7 @@ fun createSettingsCollapseAdapterDelegate(
 
         tvItemSettingsCollapseTitle.text = item.title
         viewItemSettingsDivider.visible = item.dividerIsVisible
+        arrowItemSettingsCollapse.visible = item.arrowIsVisible
         arrowItemSettingsCollapse.apply { rotation = if (item.opened) 180f else 0f }
         layoutItemSettingsCollapseTitle.setOnClick {
             arrowItemSettingsCollapse.apply { if (!item.opened) rotateDown() else rotateUp() }
@@ -40,6 +41,7 @@ data class SettingsCollapseViewData(
     @DrawableRes val iconResId: Int,
     @ColorInt val iconColor: Int,
     val dividerIsVisible: Boolean = true,
+    val arrowIsVisible: Boolean = true,
 ) : ViewHolderType {
 
     override fun getUniqueId(): Long = block.ordinal.toLong()

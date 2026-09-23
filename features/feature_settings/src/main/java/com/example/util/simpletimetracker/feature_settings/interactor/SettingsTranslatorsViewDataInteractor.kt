@@ -18,26 +18,8 @@ class SettingsTranslatorsViewDataInteractor @Inject constructor(
 ) {
 
     fun execute(): List<ViewHolderType> {
-        val result = mutableListOf<ViewHolderType>()
-
-        result += SettingsTopViewData(
-            block = SettingsBlock.TranslatorsTop,
-        )
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.TranslatorsTitle,
-            title = resourceRepo.getString(R.string.settings_translators),
-            subtitle = "",
-            layoutIsClickable = false,
-        )
-
-        result += loadTranslatorsViewData()
-
-        result += SettingsBottomViewData(
-            block = SettingsBlock.TranslatorsBottom,
-        )
-
-        return result
+        // Translators settings removed per user request
+        return emptyList()
     }
 
     private fun loadTranslatorsViewData(): List<SettingsTranslatorViewData> {

@@ -15,26 +15,28 @@ class SettingsContributorsViewDataInteractor @Inject constructor(
 ) {
 
     fun execute(): List<ViewHolderType> {
-        val result = mutableListOf<ViewHolderType>()
-
-        result += SettingsTopViewData(
-            block = SettingsBlock.ContributorsTop,
-        )
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.ContributorsTitle,
-            title = resourceRepo.getString(R.string.settings_contributors),
-            subtitle = "",
-            layoutIsClickable = false,
-        )
-
-        result += loadContributorsViewData()
-
-        result += SettingsBottomViewData(
-            block = SettingsBlock.ContributorsBottom,
-        )
-
-        return result
+        // Contributors section hidden per user request.
+//        val result = mutableListOf<ViewHolderType>()
+//
+//        result += SettingsTopViewData(
+//            block = SettingsBlock.ContributorsTop,
+//        )
+//
+//        result += SettingsTextViewData(
+//            block = SettingsBlock.ContributorsTitle,
+//            title = resourceRepo.getString(R.string.settings_contributors),
+//            subtitle = "",
+//            layoutIsClickable = false,
+//        )
+//
+//        result += loadContributorsViewData()
+//
+//        result += SettingsBottomViewData(
+//            block = SettingsBlock.ContributorsBottom,
+//        )
+//
+//        return result
+        return emptyList()
     }
 
     private fun loadContributorsViewData(): List<SettingsTranslatorViewData> {

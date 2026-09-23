@@ -25,58 +25,9 @@ class SettingsMainViewDataInteractor @Inject constructor(
 ) {
 
     suspend fun execute(): List<ViewHolderType> {
-        val result = mutableListOf<ViewHolderType>()
-
-        result += SettingsTopViewData(
-            block = SettingsBlock.MainTop,
-        )
-
-        result += SettingsCheckboxViewData(
-            block = SettingsBlock.AllowMultitasking,
-            title = resourceRepo.getString(R.string.settings_allow_multitasking),
-            subtitle = resourceRepo.getString(R.string.settings_allow_multitasking_hint),
-            isChecked = prefsInteractor.getAllowMultitasking(),
-        )
-
-        val darkModeViewData = loadDarkModeViewData()
-        result += SettingsSpinnerViewData(
-            block = SettingsBlock.DarkMode,
-            title = resourceRepo.getString(R.string.settings_dark_mode),
-            value = darkModeViewData.items
-                .getOrNull(darkModeViewData.selectedPosition)?.text.orEmpty(),
-            items = darkModeViewData.items,
-            selectedPosition = darkModeViewData.selectedPosition,
-            processSameItemSelected = false,
-        )
-
-        val languageViewData = loadLanguageViewData()
-        result += SettingsSpinnerViewData(
-            block = SettingsBlock.Language,
-            title = resourceRepo.getString(R.string.settings_language),
-            value = languageViewData.currentLanguageName,
-            items = languageViewData.items,
-            selectedPosition = -1,
-            processSameItemSelected = true,
-        ).let(::SettingsSpinnerNotCheckableViewData)
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.Categories,
-            title = resourceRepo.getString(R.string.settings_edit_categories),
-            subtitle = resourceRepo.getString(R.string.settings_edit_categories_hint),
-        )
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.Archive,
-            title = resourceRepo.getString(R.string.settings_archive),
-            subtitle = "",
-            dividerIsVisible = false,
-        )
-
-        result += SettingsBottomViewData(
-            block = SettingsBlock.MainBottom,
-        )
-
-        return result
+        // AllowMultitasking, DarkMode, Language → moved to Display settings section
+        // Categories, Archive → moved to DataManagement section
+        return emptyList()
     }
 
     private suspend fun loadDarkModeViewData(): DarkModeViewData {

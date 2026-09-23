@@ -1,6 +1,7 @@
 package com.example.util.simpletimetracker.feature_settings.interactor
 
 import com.example.util.simpletimetracker.core.mapper.DayOfWeekViewDataMapper
+import com.example.util.simpletimetracker.core.interactor.LanguageInteractor
 import com.example.util.simpletimetracker.core.repo.ResourceRepo
 import com.example.util.simpletimetracker.domain.widget.model.WidgetTransparencyPercent
 import com.example.util.simpletimetracker.domain.prefs.interactor.PrefsInteractor
@@ -11,8 +12,10 @@ import com.example.util.simpletimetracker.feature_settings.api.SettingsBlock
 import com.example.util.simpletimetracker.feature_settings.views.SettingsCheckboxWithRangeViewData.RangeViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsSpinnerEvenViewData
 import com.example.util.simpletimetracker.feature_settings.mapper.SettingsMapper
+import com.example.util.simpletimetracker.feature_settings.viewData.DarkModeViewData
 import com.example.util.simpletimetracker.feature_settings.viewData.DaysInCalendarViewData
 import com.example.util.simpletimetracker.feature_settings.viewData.DurationFormatViewData
+import com.example.util.simpletimetracker.feature_settings.viewData.LanguageViewData
 import com.example.util.simpletimetracker.feature_settings.viewData.RepeatButtonViewData
 import com.example.util.simpletimetracker.feature_settings.viewData.WidgetTransparencyViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsBottomViewData
@@ -22,6 +25,7 @@ import com.example.util.simpletimetracker.feature_settings.views.SettingsCheckbo
 import com.example.util.simpletimetracker.feature_settings.views.SettingsCollapseViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsHintViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsSelectorViewData
+import com.example.util.simpletimetracker.feature_settings.views.SettingsSpinnerNotCheckableViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsSpinnerViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsSpinnerWithButtonViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsTextViewData
@@ -35,6 +39,7 @@ class SettingsDisplayViewDataInteractor @Inject constructor(
     private val settingsMapper: SettingsMapper,
     private val prefsInteractor: PrefsInteractor,
     private val dayOfWeekViewDataMapper: DayOfWeekViewDataMapper,
+    private val languageInteractor: LanguageInteractor,
 ) {
 
     suspend fun execute(
@@ -58,6 +63,38 @@ class SettingsDisplayViewDataInteractor @Inject constructor(
         )
 
         if (!isCollapsed) {
+            // --- Appearance & Tracking (moved from main card) ---
+            val darkModeViewData = loadDarkModeViewData()
+            result += SettingsSpinnerViewData(
+                block = SettingsBlock.DarkMode,
+                title = resourceRepo.getString(R.string.settings_dark_mode),
+                value = darkModeViewData.items
+                    .getOrNull(darkModeViewData.selectedPosition)?.text.orEmpty(),
+                items = darkModeViewData.items,
+                selectedPosition = darkModeViewData.selectedPosition,
+                processSameItemSelected = false,
+            )
+
+            val languageViewData = loadLanguageViewData()
+            result += SettingsSpinnerViewData(
+                block = SettingsBlock.Language,
+                title = resourceRepo.getString(R.string.settings_language),
+                value = languageViewData.currentLanguageName,
+                items = languageViewData.items,
+                selectedPosition = -1,
+                processSameItemSelected = true,
+            ).let(::SettingsSpinnerNotCheckableViewData)
+
+            result += SettingsCheckboxViewData(
+                block = SettingsBlock.AllowMultitasking,
+                title = resourceRepo.getString(R.string.settings_allow_multitasking),
+                subtitle = resourceRepo.getString(R.string.settings_allow_multitasking_hint),
+                isChecked = prefsInteractor.getAllowMultitasking(),
+                bottomSpaceIsVisible = true,
+                dividerIsVisible = true,
+            )
+
+            // --- Original display items ---
             result += SettingsTextViewData(
                 block = SettingsBlock.DisplayUntrackedOptions,
                 title = resourceRepo.getString(R.string.untracked_time_name),
@@ -392,5 +429,15 @@ class SettingsDisplayViewDataInteractor @Inject constructor(
     private suspend fun loadRepeatButtonViewData(): RepeatButtonViewData {
         return prefsInteractor.getRepeatButtonType()
             .let(settingsMapper::toRepeatButtonViewData)
+    }
+
+    private suspend fun loadDarkModeViewData(): DarkModeViewData {
+        return prefsInteractor.getSelectedDarkMode()
+            .let(settingsMapper::toDarkModeViewData)
+    }
+
+    private fun loadLanguageViewData(): LanguageViewData {
+        return languageInteractor.getCurrentLanguage()
+            .let(settingsMapper::toLanguageViewData)
     }
 }

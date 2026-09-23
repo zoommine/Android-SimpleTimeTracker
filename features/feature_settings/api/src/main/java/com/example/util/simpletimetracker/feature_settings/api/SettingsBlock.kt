@@ -10,6 +10,7 @@ enum class SettingsBlock {
     MainBottom,
 
     RatingTop,
+    RatingCollapse,
     RateUs,
     SupportDevelopment,
     Feedback,
@@ -129,6 +130,10 @@ enum class SettingsBlock {
     ExportCustomized,
     ExportTriggerAutoBackup,
     ExportBottom,
+
+    DataManagementTop,
+    DataManagementCollapse,
+    DataManagementBottom,
 
     TranslatorsTop,
     TranslatorsTitle,

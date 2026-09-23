@@ -29,78 +29,73 @@ class SettingsExportViewDataInteractor @Inject constructor(
     suspend fun execute(
         isCollapsed: Boolean,
     ): List<ViewHolderType> {
-        val isDarkTheme = prefsInteractor.getDarkMode()
-        val result = mutableListOf<ViewHolderType>()
-
-        result += SettingsTopViewData(
-            block = SettingsBlock.ExportTop,
-        )
-
-        result += SettingsCollapseViewData(
-            block = SettingsBlock.ExportCollapse,
-            title = resourceRepo.getString(R.string.settings_export_title),
-            opened = !isCollapsed,
-            iconResId = R.drawable.import_export,
-            iconColor = (if (isDarkTheme) R.color.green_300 else R.color.green_200)
-                .let(resourceRepo::getColor),
-            dividerIsVisible = !isCollapsed,
-        )
-
-        if (!isCollapsed) {
-            result += SettingsTextViewData(
-                block = SettingsBlock.ExportSpreadsheet,
-                title = resourceRepo.getString(R.string.settings_export_csv),
-                subtitle = resourceRepo.getString(R.string.settings_export_csv_description),
-                hint = resourceRepo.getString(R.string.settings_export_warning),
-                hintColor = SettingsTextColor.Attention,
-            )
-
-            val automaticExportEnabled = loadAutomaticExportEnabled()
-            val automaticExportLastSaveTime = loadAutomaticExportLastSaveTime()
-            val automaticExportLastSaveTimeVisible = automaticExportLastSaveTime.isNotEmpty()
-            result += SettingsCheckboxViewData(
-                block = SettingsBlock.ExportSpreadsheetAutomatic,
-                title = resourceRepo.getString(R.string.settings_automatic_export),
-                subtitle = resourceRepo.getString(R.string.settings_automatic_description),
-                isChecked = automaticExportEnabled,
-                bottomSpaceIsVisible = !automaticExportEnabled,
-                dividerIsVisible = !automaticExportEnabled,
-                forceBind = true,
-            )
-            if (automaticExportLastSaveTimeVisible) {
-                result += SettingsHintViewData(
-                    block = SettingsBlock.ExportSpreadsheetAutomaticHint,
-                    text = automaticExportLastSaveTime,
-                    textColor = SettingsTextColor.Success,
-                    topSpaceIsVisible = false,
-                    dividerIsVisible = false,
-                    bottomSpaceIsVisible = false,
-                )
-            }
-            if (automaticExportEnabled) {
-                result += SettingsSelectorViewData(
-                    block = SettingsBlock.ExportSpreadsheetAutomaticTime,
-                    title = resourceRepo.getString(R.string.settings_automatic_save_time),
-                    subtitle = "",
-                    selectedValue = loadAutomaticExportTriggerTime(),
-                    bottomSpaceIsVisible = true,
-                    dividerIsVisible = true,
-                )
-            }
-
-            result += SettingsTextViewData(
-                block = SettingsBlock.ExportCustomized,
-                title = resourceRepo.getString(R.string.settings_backup_options),
-                subtitle = "",
-                dividerIsVisible = false,
-            )
-        }
-
-        result += SettingsBottomViewData(
-            block = SettingsBlock.ExportBottom,
-        )
-
-        return result
+        // Content moved to SettingsDataManagementViewDataInteractor.
+//        val isDarkTheme = prefsInteractor.getDarkMode()
+//        val result = mutableListOf<ViewHolderType>()
+//
+//        result += SettingsTopViewData(block = SettingsBlock.ExportTop)
+//
+//        result += SettingsCollapseViewData(
+//            block = SettingsBlock.ExportCollapse,
+//            title = resourceRepo.getString(R.string.settings_export_title),
+//            opened = !isCollapsed,
+//            iconResId = R.drawable.import_export,
+//            iconColor = (if (isDarkTheme) R.color.green_300 else R.color.green_200)
+//                .let(resourceRepo::getColor),
+//            dividerIsVisible = !isCollapsed,
+//        )
+//
+//        if (!isCollapsed) {
+//            result += SettingsTextViewData(
+//                block = SettingsBlock.ExportSpreadsheet,
+//                title = resourceRepo.getString(R.string.settings_export_csv),
+//                subtitle = resourceRepo.getString(R.string.settings_export_csv_description),
+//                hint = resourceRepo.getString(R.string.settings_export_warning),
+//                hintColor = SettingsTextColor.Attention,
+//            )
+//            val automaticExportEnabled = loadAutomaticExportEnabled()
+//            val automaticExportLastSaveTime = loadAutomaticExportLastSaveTime()
+//            val automaticExportLastSaveTimeVisible = automaticExportLastSaveTime.isNotEmpty()
+//            result += SettingsCheckboxViewData(
+//                block = SettingsBlock.ExportSpreadsheetAutomatic,
+//                title = resourceRepo.getString(R.string.settings_automatic_export),
+//                subtitle = resourceRepo.getString(R.string.settings_automatic_description),
+//                isChecked = automaticExportEnabled,
+//                bottomSpaceIsVisible = !automaticExportEnabled,
+//                dividerIsVisible = !automaticExportEnabled,
+//                forceBind = true,
+//            )
+//            if (automaticExportLastSaveTimeVisible) {
+//                result += SettingsHintViewData(
+//                    block = SettingsBlock.ExportSpreadsheetAutomaticHint,
+//                    text = automaticExportLastSaveTime,
+//                    textColor = SettingsTextColor.Success,
+//                    topSpaceIsVisible = false,
+//                    dividerIsVisible = false,
+//                    bottomSpaceIsVisible = false,
+//                )
+//            }
+//            if (automaticExportEnabled) {
+//                result += SettingsSelectorViewData(
+//                    block = SettingsBlock.ExportSpreadsheetAutomaticTime,
+//                    title = resourceRepo.getString(R.string.settings_automatic_save_time),
+//                    subtitle = "",
+//                    selectedValue = loadAutomaticExportTriggerTime(),
+//                    bottomSpaceIsVisible = true,
+//                    dividerIsVisible = true,
+//                )
+//            }
+//            result += SettingsTextViewData(
+//                block = SettingsBlock.ExportCustomized,
+//                title = resourceRepo.getString(R.string.settings_backup_options),
+//                subtitle = "",
+//                dividerIsVisible = false,
+//            )
+//        }
+//
+//        result += SettingsBottomViewData(block = SettingsBlock.ExportBottom)
+//        return result
+        return emptyList()
     }
 
     suspend fun executeAdvanced(): List<ViewHolderType> {

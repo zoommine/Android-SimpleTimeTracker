@@ -26,83 +26,77 @@ class SettingsBackupViewDataInteractor @Inject constructor(
     suspend fun execute(
         isCollapsed: Boolean,
     ): List<ViewHolderType> {
-        val isDarkTheme = prefsInteractor.getDarkMode()
-        val result = mutableListOf<ViewHolderType>()
-
-        result += SettingsTopViewData(
-            block = SettingsBlock.BackupTop,
-        )
-
-        result += SettingsCollapseViewData(
-            block = SettingsBlock.BackupCollapse,
-            title = resourceRepo.getString(R.string.settings_backup_title),
-            opened = !isCollapsed,
-            iconResId = R.drawable.save,
-            iconColor = (if (isDarkTheme) R.color.green_300 else R.color.green_200)
-                .let(resourceRepo::getColor),
-            dividerIsVisible = !isCollapsed,
-        )
-
-        if (!isCollapsed) {
-            result += SettingsTextViewData(
-                block = SettingsBlock.BackupSave,
-                title = resourceRepo.getString(R.string.settings_save_backup),
-                subtitle = resourceRepo.getString(R.string.settings_save_description),
-            )
-
-            result += SettingsTextViewData(
-                block = SettingsBlock.BackupRestore,
-                title = resourceRepo.getString(R.string.settings_restore_backup),
-                subtitle = resourceRepo.getString(R.string.settings_restore_description),
-                subtitleColor = SettingsTextColor.Attention,
-            )
-
-            val automaticBackupEnabled = loadAutomaticBackupEnabled()
-            val automaticBackupLastSaveTime = loadAutomaticBackupLastSaveTime()
-            val automaticBackupLastSaveTimeVisible = automaticBackupLastSaveTime.isNotEmpty()
-            result += SettingsCheckboxViewData(
-                block = SettingsBlock.BackupAutomatic,
-                title = resourceRepo.getString(R.string.settings_automatic_backup),
-                subtitle = resourceRepo.getString(R.string.settings_automatic_description),
-                isChecked = automaticBackupEnabled,
-                bottomSpaceIsVisible = !automaticBackupEnabled,
-                dividerIsVisible = !automaticBackupEnabled,
-                forceBind = true,
-            )
-            if (automaticBackupLastSaveTimeVisible) {
-                result += SettingsHintViewData(
-                    block = SettingsBlock.BackupAutomaticHint,
-                    text = automaticBackupLastSaveTime,
-                    textColor = SettingsTextColor.Success,
-                    topSpaceIsVisible = false,
-                    dividerIsVisible = false,
-                    bottomSpaceIsVisible = false,
-                )
-            }
-            if (automaticBackupEnabled) {
-                result += SettingsSelectorViewData(
-                    block = SettingsBlock.BackupAutomaticTime,
-                    title = resourceRepo.getString(R.string.settings_automatic_save_time),
-                    subtitle = "",
-                    selectedValue = loadAutomaticBackupTriggerTime(),
-                    bottomSpaceIsVisible = true,
-                    dividerIsVisible = true,
-                )
-            }
-
-            result += SettingsTextViewData(
-                block = SettingsBlock.BackupCustomized,
-                title = resourceRepo.getString(R.string.settings_backup_options),
-                subtitle = "",
-                dividerIsVisible = false,
-            )
-        }
-
-        result += SettingsBottomViewData(
-            block = SettingsBlock.BackupBottom,
-        )
-
-        return result
+        // Content moved to SettingsDataManagementViewDataInteractor.
+//        val isDarkTheme = prefsInteractor.getDarkMode()
+//        val result = mutableListOf<ViewHolderType>()
+//
+//        result += SettingsTopViewData(block = SettingsBlock.BackupTop)
+//
+//        result += SettingsCollapseViewData(
+//            block = SettingsBlock.BackupCollapse,
+//            title = resourceRepo.getString(R.string.settings_backup_title),
+//            opened = !isCollapsed,
+//            iconResId = R.drawable.save,
+//            iconColor = (if (isDarkTheme) R.color.green_300 else R.color.green_200)
+//                .let(resourceRepo::getColor),
+//            dividerIsVisible = !isCollapsed,
+//        )
+//
+//        if (!isCollapsed) {
+//            result += SettingsTextViewData(
+//                block = SettingsBlock.BackupSave,
+//                title = resourceRepo.getString(R.string.settings_save_backup),
+//                subtitle = resourceRepo.getString(R.string.settings_save_description),
+//            )
+//            result += SettingsTextViewData(
+//                block = SettingsBlock.BackupRestore,
+//                title = resourceRepo.getString(R.string.settings_restore_backup),
+//                subtitle = resourceRepo.getString(R.string.settings_restore_description),
+//                subtitleColor = SettingsTextColor.Attention,
+//            )
+//            val automaticBackupEnabled = loadAutomaticBackupEnabled()
+//            val automaticBackupLastSaveTime = loadAutomaticBackupLastSaveTime()
+//            val automaticBackupLastSaveTimeVisible = automaticBackupLastSaveTime.isNotEmpty()
+//            result += SettingsCheckboxViewData(
+//                block = SettingsBlock.BackupAutomatic,
+//                title = resourceRepo.getString(R.string.settings_automatic_backup),
+//                subtitle = resourceRepo.getString(R.string.settings_automatic_description),
+//                isChecked = automaticBackupEnabled,
+//                bottomSpaceIsVisible = !automaticBackupEnabled,
+//                dividerIsVisible = !automaticBackupEnabled,
+//                forceBind = true,
+//            )
+//            if (automaticBackupLastSaveTimeVisible) {
+//                result += SettingsHintViewData(
+//                    block = SettingsBlock.BackupAutomaticHint,
+//                    text = automaticBackupLastSaveTime,
+//                    textColor = SettingsTextColor.Success,
+//                    topSpaceIsVisible = false,
+//                    dividerIsVisible = false,
+//                    bottomSpaceIsVisible = false,
+//                )
+//            }
+//            if (automaticBackupEnabled) {
+//                result += SettingsSelectorViewData(
+//                    block = SettingsBlock.BackupAutomaticTime,
+//                    title = resourceRepo.getString(R.string.settings_automatic_save_time),
+//                    subtitle = "",
+//                    selectedValue = loadAutomaticBackupTriggerTime(),
+//                    bottomSpaceIsVisible = true,
+//                    dividerIsVisible = true,
+//                )
+//            }
+//            result += SettingsTextViewData(
+//                block = SettingsBlock.BackupCustomized,
+//                title = resourceRepo.getString(R.string.settings_backup_options),
+//                subtitle = "",
+//                dividerIsVisible = false,
+//            )
+//        }
+//
+//        result += SettingsBottomViewData(block = SettingsBlock.BackupBottom)
+//        return result
+        return emptyList()
     }
 
     private suspend fun loadAutomaticBackupEnabled(): Boolean {

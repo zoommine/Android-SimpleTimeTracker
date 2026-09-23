@@ -41,8 +41,8 @@ class SettingsMainViewModelDelegate @Inject constructor(
 
     override fun onBlockClicked(block: SettingsBlock) {
         when (block) {
-            SettingsBlock.Categories -> onEditCategoriesClick()
-            SettingsBlock.Archive -> onArchiveClick()
+            // Categories → moved to SettingsDataManagementViewModelDelegate
+            // Archive    → moved to SettingsDataManagementViewModelDelegate
             SettingsBlock.AllowMultitasking -> onAllowMultitaskingClicked()
             else -> {
                 // Do nothing

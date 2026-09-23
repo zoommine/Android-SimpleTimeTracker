@@ -30,7 +30,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             isCrunchPngs = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android.txt"),

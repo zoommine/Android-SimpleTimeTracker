@@ -7,11 +7,10 @@ import com.example.util.simpletimetracker.feature_settings.api.SettingsBlock
 import com.example.util.simpletimetracker.feature_settings.model.OptionsContent
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsUiDelegated
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsAdditionalViewModelDelegate
-import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsBackupViewModelDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsContributorsViewModelDelegate
+import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsDataManagementViewModelDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsDisplayViewModelDelegate
-import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsExportViewModelDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsMainViewModelDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsNotificationsViewModelDelegate
 import com.example.util.simpletimetracker.feature_settings.viewModel.delegate.SettingsRatingViewModelDelegate
@@ -26,20 +25,21 @@ class SettingsViewModelDelegatesProvider @Inject constructor(
     ratingDelegate: SettingsRatingViewModelDelegate,
     notificationsDelegate: SettingsNotificationsViewModelDelegate,
     displayDelegate: SettingsDisplayViewModelDelegate,
-    backupDelegate: SettingsBackupViewModelDelegate,
-    exportDelegate: SettingsExportViewModelDelegate,
+    dataManagementDelegate: SettingsDataManagementViewModelDelegate,
     translatorsDelegate: SettingsTranslatorsViewModelDelegate,
     contributorsDelegate: SettingsContributorsViewModelDelegate,
+    // Kept for reference; content moved to SettingsDataManagementViewModelDelegate.
+    // backupDelegate: SettingsBackupViewModelDelegate,
+    // exportDelegate: SettingsExportViewModelDelegate,
 ) : SettingsUiDelegated {
 
     val delegates: List<SettingsDelegate> = listOf(
-        mainDelegate,
-        ratingDelegate,
+        mainDelegate,           // Handles: AllowMultitasking, DarkMode, Language (UI now in Display)
         notificationsDelegate,
         displayDelegate,
         additionalDelegate,
-        backupDelegate,
-        exportDelegate,
+        dataManagementDelegate, // Categories, Archive, Backup, Export
+        ratingDelegate,         // Version number (at bottom)
         translatorsDelegate,
         contributorsDelegate,
     )
@@ -85,13 +85,12 @@ class SettingsViewModelDelegatesProvider @Inject constructor(
 
     suspend fun loadContent(): List<ViewHolderType> {
         val order: List<SettingsDelegate.Key> = listOf(
-            SettingsMainViewModelDelegate,
-            SettingsRatingViewModelDelegate,
-            SettingsNotificationsViewModelDelegate,
-            SettingsDisplayViewModelDelegate,
-            SettingsAdditionalViewModelDelegate,
-            SettingsBackupViewModelDelegate,
-            SettingsExportViewModelDelegate,
+            SettingsMainViewModelDelegate,           // produces emptyList; still handles DarkMode/Language/AllowMultitasking clicks
+            SettingsNotificationsViewModelDelegate,  // 🔔 通知
+            SettingsDisplayViewModelDelegate,        // 🖥️ 显示（含外观/语言/多任务）
+            SettingsAdditionalViewModelDelegate,     // ⚙️ 其他设置
+            SettingsDataManagementViewModelDelegate, // 🗄️ 备份与数据
+            SettingsRatingViewModelDelegate,         // ℹ️ 版本号（最底部）
             SettingsTranslatorsViewModelDelegate,
             SettingsContributorsViewModelDelegate,
         )

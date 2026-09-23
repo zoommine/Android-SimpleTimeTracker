@@ -3,6 +3,7 @@ package com.example.util.simpletimetracker.feature_settings.viewModel.delegate
 import com.example.util.simpletimetracker.core.base.ViewModelDelegate
 import com.example.util.simpletimetracker.core.provider.ApplicationDataProvider
 import com.example.util.simpletimetracker.core.repo.ResourceRepo
+import com.example.util.simpletimetracker.domain.extension.flip
 import com.example.util.simpletimetracker.feature_settings.api.SettingsBlock
 import com.example.util.simpletimetracker.feature_settings.R
 import com.example.util.simpletimetracker.feature_settings.interactor.SettingsRatingViewDataInteractor
@@ -25,6 +26,7 @@ class SettingsRatingViewModelDelegate @Inject constructor(
     private var parent: SettingsParent? = null
     private var debugUnlocked = false
     private var debugClicksCount: Int = 0
+    private var isCollapsed: Boolean = true
 
     override fun init(parent: SettingsParent) {
         this.parent = parent
@@ -37,7 +39,10 @@ class SettingsRatingViewModelDelegate @Inject constructor(
     override suspend fun getViewData(): SettingsDelegate.ViewData {
         return SettingsDelegate.ViewData(
             key = Companion,
-            data = settingsRatingViewDataInteractor.execute(debugUnlocked),
+            data = settingsRatingViewDataInteractor.execute(
+                debugUnlocked = debugUnlocked,
+                isCollapsed = isCollapsed,
+            ),
         )
     }
 
@@ -46,12 +51,18 @@ class SettingsRatingViewModelDelegate @Inject constructor(
             SettingsBlock.RateUs -> onRateClick()
             SettingsBlock.SupportDevelopment -> onSupportDevelopmentClick()
             SettingsBlock.Feedback -> onFeedbackClick()
-            SettingsBlock.Version -> onVersionClick()
+            // Version header: each click counts toward debug unlock;
+            // once unlocked it also toggles the collapse to reveal Debug menu.
+            SettingsBlock.RatingCollapse -> onVersionClick()
             SettingsBlock.DebugMenu -> onDebugMenuClick()
             else -> {
                 // Do nothing
             }
         }
+    }
+
+    override fun collapse() {
+        isCollapsed = true
     }
 
     private fun onRateClick() {
@@ -81,8 +92,12 @@ class SettingsRatingViewModelDelegate @Inject constructor(
         debugClicksCount += 1
         if (debugClicksCount >= DEBUG_CLICKS_TO_UNLOCK) {
             debugUnlocked = true
-            delegateScope.launch { parent?.updateContent() }
         }
+        if (debugUnlocked) {
+            // Toggle expansion to show/hide Debug menu.
+            isCollapsed = isCollapsed.flip()
+        }
+        delegateScope.launch { parent?.updateContent() }
     }
 
     private fun onDebugMenuClick() {

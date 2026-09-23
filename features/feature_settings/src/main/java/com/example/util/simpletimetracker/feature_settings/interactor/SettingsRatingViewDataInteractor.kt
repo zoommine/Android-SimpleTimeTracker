@@ -6,8 +6,8 @@ import com.example.util.simpletimetracker.feature_base_adapter.ViewHolderType
 import com.example.util.simpletimetracker.feature_settings.R
 import com.example.util.simpletimetracker.feature_settings.api.SettingsBlock
 import com.example.util.simpletimetracker.feature_settings.views.SettingsBottomViewData
+import com.example.util.simpletimetracker.feature_settings.views.SettingsCollapseViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsTextViewData
-import com.example.util.simpletimetracker.feature_settings.views.SettingsTextWithIconViewData
 import com.example.util.simpletimetracker.feature_settings.views.SettingsTopViewData
 import javax.inject.Inject
 
@@ -18,47 +18,30 @@ class SettingsRatingViewDataInteractor @Inject constructor(
 
     fun execute(
         debugUnlocked: Boolean,
+        isCollapsed: Boolean,
     ): List<ViewHolderType> {
+        val isDarkTheme = false // version card is neutral color
         val result = mutableListOf<ViewHolderType>()
 
         result += SettingsTopViewData(
             block = SettingsBlock.RatingTop,
         )
 
-        result += SettingsTextWithIconViewData(
-            data = SettingsTextViewData(
-                block = SettingsBlock.RateUs,
-                title = resourceRepo.getString(R.string.settings_rate),
-                subtitle = resourceRepo.getString(R.string.settings_rate_description),
-            ),
-            iconResId = R.drawable.star_border,
-            iconColor = resourceRepo.getColor(R.color.amber_400),
+        // Version number styled the same as other section headers (collapse card style).
+        // Clicking it 5 times unlocks the debug menu (handled in delegate).
+        result += SettingsCollapseViewData(
+            block = SettingsBlock.RatingCollapse,
+            title = resourceRepo.getString(R.string.settings_version) +
+                "  " + loadVersionName(),
+            opened = !isCollapsed,
+            iconResId = R.drawable.info,
+            iconColor = resourceRepo.getColor(R.color.blue_300),
+            dividerIsVisible = !isCollapsed && debugUnlocked,
+            arrowIsVisible = debugUnlocked,
         )
 
-        result += SettingsTextWithIconViewData(
-            data = SettingsTextViewData(
-                block = SettingsBlock.SupportDevelopment,
-                title = resourceRepo.getString(R.string.settings_support_development),
-                subtitle = resourceRepo.getString(R.string.settings_support_development_hint),
-            ),
-            iconResId = R.drawable.favorite_border,
-            iconColor = resourceRepo.getColor(R.color.orange_400),
-        )
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.Feedback,
-            title = resourceRepo.getString(R.string.settings_feedback),
-            subtitle = resourceRepo.getString(R.string.settings_feedback_description),
-        )
-
-        result += SettingsTextViewData(
-            block = SettingsBlock.Version,
-            title = resourceRepo.getString(R.string.settings_version),
-            subtitle = loadVersionName(),
-            dividerIsVisible = debugUnlocked,
-        )
-
-        if (debugUnlocked) {
+        // Debug menu — only visible when unlocked AND section is expanded.
+        if (debugUnlocked && !isCollapsed) {
             result += SettingsTextViewData(
                 block = SettingsBlock.DebugMenu,
                 title = resourceRepo.getString(R.string.debug_menu),
